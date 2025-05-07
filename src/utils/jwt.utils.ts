@@ -2,15 +2,9 @@ import jwt from 'jsonwebtoken';
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 export class JwtUtils {
-  private readonly ETHERMAIL_API_DOMAIN: string;
-
-  constructor() {
-    this.ETHERMAIL_API_DOMAIN = process.env.NEXT_PUBLIC_ETHERMAIL_API_DOMAIN;
-  }
-
   public verifyToken = async (token: string) => {
     try {
-      const openIDConfigUrl = `https://${this.ETHERMAIL_API_DOMAIN}/.well-known/openid-configuration`;
+      const openIDConfigUrl = `https://${process.env.NEXT_PUBLIC_ETHERMAIL_API_DOMAIN}/.well-known/openid-configuration`;
       const openIDConfigResponse = await fetch(openIDConfigUrl);
       const { jwks_uri } = await openIDConfigResponse.json();
 

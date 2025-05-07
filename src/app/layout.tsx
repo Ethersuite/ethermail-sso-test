@@ -18,7 +18,7 @@ export default function RootLayout({
       if (!document.getElementById('ethermail-sdk-script')) {
         var p = document.createElement('script');
         p.id = 'ethermail-sdk-script';
-        p.src = process.env.NEXT_PUBLIC_WIDGET_URL;
+        p.src = process.env.NEXT_PUBLIC_WIDGET_URL ?? 'https://cdn-email.ethermail.io/sdk/v2/ethermail.js';
         document.body.appendChild(p);
         p.setAttribute('a', args.afid);
         p.setAttribute('b', args.communityAlias);
@@ -26,8 +26,8 @@ export default function RootLayout({
         p.setAttribute('c', args.features);
       }
     })({
-      afid: process.env.NEXT_PUBLIC_WIDGET_AFID,
-      communityAlias: process.env.NEXT_PUBLIC_WIDGET_COMMUNITY_NAME,
+      afid: process.env.NEXT_PUBLIC_WIDGET_AFID ?? '65ddf7aa3631bb310429bbb7',
+      communityAlias: process.env.NEXT_PUBLIC_WIDGET_COMMUNITY_NAME ?? 'ethermail',
       features: ['login'],
     });
   }, []);

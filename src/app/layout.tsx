@@ -18,7 +18,7 @@ export default function RootLayout({
       if (!document.getElementById('ethermail-sdk-script')) {
         var p = document.createElement('script');
         p.id = 'ethermail-sdk-script';
-        p.src = 'https://cdn-email.ethermail.io/sdk/v2/staging-ethermail.js';
+        p.src = process.env.NEXT_PUBLIC_WIDGET_URL;
         document.body.appendChild(p);
         p.setAttribute('a', args.afid);
         p.setAttribute('b', args.communityAlias);
@@ -26,8 +26,8 @@ export default function RootLayout({
         p.setAttribute('c', args.features);
       }
     })({
-      afid: '65de00d53b06f3268d27ecbc',
-      communityAlias: 'ethermail',
+      afid: process.env.NEXT_PUBLIC_WIDGET_AFID,
+      communityAlias: process.env.NEXT_PUBLIC_WIDGET_COMMUNITY_NAME,
       features: ['login'],
     });
   }, []);

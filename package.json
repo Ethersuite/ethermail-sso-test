@@ -12,6 +12,7 @@
     "@ethermail/ethermail-wallet-provider": "^0.1.11",
     "@reduxjs/toolkit": "^2.2.5",
     "ethers": "^6.12.1",
+    "jose": "^6.0.11",
     "jsonwebtoken": "^9.0.2",
     "next": "14.2.3",
     "react": "^18",

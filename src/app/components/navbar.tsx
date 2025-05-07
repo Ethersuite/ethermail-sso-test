@@ -20,6 +20,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { EthermailLoginData } from '@/intefaces/ethermail.interfaces';
 import Web3 from "web3";
 import { _web3TestProvider } from '@/lib/reducers/web3TestProviderSlice';
+import { JwtUtils } from '@/utils/jwt.utils';
 
 export default function NavBar() {
   const router = useRouter();
@@ -42,14 +43,24 @@ export default function NavBar() {
 
   useEffect(() => {
     toast.success('Setting Event Listeners!');
-    window.addEventListener('EtherMailSignInOnSuccess', (event) => {
+    window.addEventListener('EtherMailSignInOnSuccess', async (event) => {
       const __loginEvent = event as EtherMailSignInOnSuccessEvent;
-      const __loginData = jwt.decode(__loginEvent.detail.token);
+
+      const jwtUtils = new JwtUtils();
+
+      const __sessionToken = __loginEvent.detail.token;
+
+      const validToken = await jwtUtils.verifyToken(__sessionToken);
+      if (!validToken) {
+        throw new Error('Invalid Token!');
+      }
+
+      const __loginData = jwtUtils.decodeToken(__sessionToken) as EthermailLoginData;
       console.log(__loginData);
 
       const __ethermailProvider = new EtherMailProvider({
-        websocketServer: 'wss://staging-api.ethermail.io/events',
-        appUrl: 'https://staging.ethermail.io',
+        websocketServer: `wss://${process.env.NEXT_PUBLIC_ETHERMAIL_API_DOMAIN}/events`,
+        appUrl: `https://${process.env.NEXT_PUBLIC_ETHERMAIL_DOMAIN}`,
       });
       const __browserProvider = new BrowserProvider(__ethermailProvider);
 
@@ -216,7 +227,7 @@ export default function NavBar() {
                 color: 'white',
                 fontWeight: 700,
                 borderRadius: '1rem',
-              }} widget="67600d0d93c67ac6b0c7c510" type={loginType}
+              }} widget={process.env.NEXT_PUBLIC_WIDGET_ID} type={loginType}
                                permissions={ssoPermission} label="Connect Wallet"></ethermail-login>
             }
           </div>

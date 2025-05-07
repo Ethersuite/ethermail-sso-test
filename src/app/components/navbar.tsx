@@ -50,10 +50,11 @@ export default function NavBar() {
 
       const __sessionToken = __loginEvent.detail.token;
 
-      // const validToken = await jwtUtils.verifyToken(__sessionToken);
-      // if (!validToken) {
-      //   throw new Error('Invalid Token!');
-      // }
+      // @dev Verification of the token is optional
+      const tokenVerificationResponse = await jwtUtils.verifyToken(__sessionToken);
+      if (tokenVerificationResponse.message !== 'Token is valid') {
+        throw new Error('Invalid Token!');
+      }
 
       const __loginData = jwtUtils.decodeToken(__sessionToken) as EthermailLoginData;
       console.log(__loginData);
